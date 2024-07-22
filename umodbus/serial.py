@@ -117,7 +117,10 @@ class Serial(CommonModbusFunctions):
                             )
 
         if ctrl_pin is not None:
-            self._ctrlPin = Pin(ctrl_pin, mode=Pin.OUT)
+            if isinstance(ctrl_pin, list):
+                self._ctrlPin = (Pin(ctrl_pin[0], mode=Pin.OUT), Pin(ctrl_pin[1], mode=Pin.OUT))
+            else:
+                self._ctrlPin = Pin(ctrl_pin, mode=Pin.OUT)
         else:
             self._ctrlPin = None
 
@@ -266,7 +269,11 @@ class Serial(CommonModbusFunctions):
         modbus_adu.extend(self._calculate_crc16(modbus_adu))
 
         if self._ctrlPin:
-            self._ctrlPin.on()
+            if isinstance(self._ctrlPin,list):
+                self._ctrlPin[0].on()
+                self._ctrlPin[1].on()
+            else:
+                self._ctrlPin.on()
             # wait until the control pin really changed
             # 85-95us (ESP32 @ 160/240MHz)
             time.sleep_us(200)
@@ -295,7 +302,11 @@ class Serial(CommonModbusFunctions):
             time.sleep_us(sleep_time_us)
 
         if self._ctrlPin:
-            self._ctrlPin.off()
+            if isinstance(self._ctrlPin,list):
+                self._ctrlPin[0].off()
+                self._ctrlPin[1].off()
+            else:
+                self._ctrlPin.off()
 
     def _send_receive(self,
                       modbus_pdu: bytes,
