@@ -97,16 +97,24 @@ class Serial(CommonModbusFunctions):
         """
         # UART flush function is introduced in Micropython v1.20.0
         self._has_uart_flush = callable(getattr(UART, "flush", None))
-        self._uart = UART(uart_id,
-                          baudrate=baudrate,
-                          bits=data_bits,
-                          parity=parity,
-                          stop=stop_bits,
-                          # timeout_chars=2,  # WiPy only
-                          # pins=pins         # WiPy only
-                          tx=pins[0],
-                          rx=pins[1]
-                          )
+        if pins is not None:
+            self._uart = UART(uart_id,
+                            baudrate=baudrate,
+                            bits=data_bits,
+                            parity=parity,
+                            stop=stop_bits,
+                            # timeout_chars=2,  # WiPy only
+                            # pins=pins         # WiPy only
+                            tx=pins[0],
+                            rx=pins[1]
+                            )
+        else:
+            self._uart = UART(uart_id,
+                            baudrate=baudrate,
+                            bits=data_bits,
+                            parity=parity,
+                            stop=stop_bits,
+                            )
 
         if ctrl_pin is not None:
             self._ctrlPin = Pin(ctrl_pin, mode=Pin.OUT)
