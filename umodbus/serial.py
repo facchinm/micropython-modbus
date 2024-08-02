@@ -76,7 +76,8 @@ class Serial(CommonModbusFunctions):
                  stop_bits: int = 1,
                  parity=None,
                  pins: List[Union[int, Pin], Union[int, Pin]] = None,
-                 ctrl_pin: int = None):
+                 ctrl_pin: int = None,
+                 rx_pullup: bool = True):
         """
         Setup Serial/RTU Modbus
 
@@ -114,6 +115,7 @@ class Serial(CommonModbusFunctions):
                             bits=data_bits,
                             parity=parity,
                             stop=stop_bits,
+                            rx_pullup=rx_pullup,
                             )
 
         if ctrl_pin is not None:
