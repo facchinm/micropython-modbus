@@ -107,7 +107,8 @@ class Serial(CommonModbusFunctions):
                             # timeout_chars=2,  # WiPy only
                             # pins=pins         # WiPy only
                             tx=pins[0],
-                            rx=pins[1]
+                            rx=pins[1],
+                            rx_pullup=rx_pullup,
                             )
         else:
             self._uart = UART(uart_id,
@@ -120,7 +121,7 @@ class Serial(CommonModbusFunctions):
 
         if ctrl_pin is not None:
             if isinstance(ctrl_pin, list):
-                self._ctrlPin = (Pin(ctrl_pin[0], mode=Pin.OUT), Pin(ctrl_pin[1], mode=Pin.OUT))
+                self._ctrlPin = [Pin(ctrl_pin[0], mode=Pin.OUT), Pin(ctrl_pin[1], mode=Pin.OUT)]
             else:
                 self._ctrlPin = Pin(ctrl_pin, mode=Pin.OUT)
         else:
